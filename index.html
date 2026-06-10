@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kekirawa Hub - Developed by Lahiru Bandara</title>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #0284c7;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --text-light: #f8fafc;
+            --card-bg: rgba(30, 41, 59, 0.8);
+        }
+
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        }
+
+        body {
+            background-color: var(--primary);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* GLOBAL BACKGROUND SLIDER (RUNS ON EVERY PAGE) */
+        .slider-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transform: translateX(-100%);
+            transition: opacity 0.5s ease-in-out, transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Overlay for darkness & readability over images */
+        .bg-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.85));
+            z-index: -1;
+        }
+
+        /* Slider Animations */
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide.exit {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+
+        /* LOGIN SCREEN STYLES */
+        .login-container {
+            background: rgba(255, 255, 255, 0.93);
+            backdrop-filter: blur(8px);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            z-index: 10;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .login-container h2 {
+            color: #1e293b;
+            margin-bottom: 8px;
+            font-size: 28px;
+        }
+
+        p.subtitle {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            color: #475569;
+            font-size: 14px;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #0f172a;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            border-color: #4f46e5;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .login-btn:hover {
+            background-color: #4338ca;
+        }
+
+        .error-message {
+            color: #ef4444;
+            background-color: #fee2e2;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: none;
+            border: 1px solid #fca5a5;
+            animation: shake 0.2s ease-in-out 0s 2;
+        }
+
+        .success-message {
+            color: #065f46;
+            background-color: #d1fae5;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: none;
+            border: 1px solid #a7f3d0;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+            100% { transform: translateX(0); }
+        }
+
+        /* MAIN HUB / DASHBOARD STYLES */
+        .container {
+            max-width: 900px; 
+            margin: 0 auto; 
+            padding: 20px;
+            width: 100%;
+            height: 92vh; 
+            display: none; 
+            flex-direction: column;
+            position: relative;
+        }
+
+        .screen {
+            display: none; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+            height: 100%; 
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .screen.active { display: flex; }
+
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: scale(0.97); } 
+            to { opacity: 1; transform: scale(1); } 
+        }
+
+        /* Headings */
+        h1 { font-size: 3.5rem; text-align: center; margin-bottom: 10px; color: #fff; text-shadow: 0 0 25px rgba(2,132,199,0.6); }
+
+        .welcome-animated {
+            font-size: 2.8rem; font-weight: 800; text-align: center; margin-bottom: 40px;
+            background: linear-gradient(to right, #fff, var(--accent), #fff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: pulseText 3s infinite ease-in-out;
+        }
+
+        @keyframes pulseText {
+            0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); }
+        }
+
+        .sub-title { font-size: 1.6rem; color: #38bdf8; margin-bottom: 25px; font-weight: bold; text-align: center; }
+
+        /* Button Layouts */
+        .btn-grid { display: grid; grid-template-columns: 1fr; gap: 12px; width: 100%; max-width: 450px; }
+
+        .btn {
+            background: linear-gradient(135deg, var(--accent), #0ea5e9);
+            color: white; border: none; padding: 14px 25px; border-radius: 12px;
+            font-size: 1.05rem; font-weight: 600; cursor: pointer; transition: all 0.25s ease; text-align: center;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(2, 132, 199, 0.4); }
+
+        .btn-total {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+        .btn-total:hover { background: linear-gradient(135deg, #059669, #047857); }
+
+        .btn-back {
+            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+            width: auto; margin-bottom: 20px; align-self: flex-start; padding: 8px 18px; font-size: 0.9rem;
+            border-radius: 8px; box-shadow: none;
+        }
+        .btn-back:hover { background: rgba(255,255,255,0.18); transform: none; box-shadow: none; }
+
+        /* Top Bar Logout */
+        .top-logout-container {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            z-index: 20;
+        }
+        .btn-logout {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white; border: none; padding: 8px 16px; border-radius: 8px;
+            font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+        }
+        .btn-logout:hover { background: linear-gradient(135deg, #dc2626, #b91c1c); }
+
+        /* Result Cards */
+        .data-card {
+            background: var(--card-bg); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
+            padding: 30px; width: 100%; max-width: 650px; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+        .data-card h3 {
+            color: #38bdf8;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent);
+            font-size: 1.3rem;
+        }
+        .data-row {
+            display: flex; justify-content: space-between; padding: 12px 5px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .data-row:last-child { border-bottom: none; }
+        .data-label { color: #cbd5e1; font-weight: 500; }
+        .data-value { color: #ffffff; font-weight: bold; font-size: 1.1rem; }
+
+        /* FIXED STATIC FOOTER (ONE SOLID COLOR) */
+        .footer-static {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(15, 23, 42, 0.85); border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 12px 0; text-align: center; box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
+            z-index: 25;
+        }
+        .footer-text {
+            font-weight: 800; font-size: 1.2rem; letter-spacing: 2px;
+            display: inline-block;
+            color: #38bdf8; /* Single solid color specified by user */
+            text-shadow: 0 0 8px rgba(56,189,248,0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="slider-container" id="bgSlider">
+        <div class="slide active" style="background-image: url('https://www.allceylon.lk/images/location/2016/04/Avukana-Buddha-Statue-Anuradhapura-1461592473.jpeg');"></div>
+        <div class="slide" style="background-image: url('https://www.srilankansafari.com/images/kala-wewa-national-park-1.jpg');"></div>
+        <div class="slide" style="background-image: url('https://roamio.lk/gis-api/uploads/google/photo_ChIJ9woQ51GW_DoRrce6frqmvvU_0.jpg');"></div>
+    </div>
+    <div class="bg-overlay"></div>
+
+    <div class="login-container" id="loginBox">
+        <h2>ඇතුළු වන්න</h2>
+        <p class="subtitle">ඉදිරියට යාම සඳහා පරිශීලක නාමය සහ මුරපදය ඇතුළත් කරන්න</p>
+
+        <div id="errorBox" class="error-message"></div>
+        <div id="successBox" class="success-message"></div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="input-group">
+                <label for="username">පරිශීලක නාමය (Username)</label>
+                <input type="text" id="username" placeholder="e.g. lahiru_028" required>
+            </div>
+            <div class="input-group">
+                <label for="password">මුරපදය (Password)</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="login-btn">ඇතුළු වන්න</button>
+        </form>
+    </div>
+
+    <div class="login-container" id="modifyPasswordBox" style="display: none;">
+        <h2>මුරපදය වෙනස් කරන්න</h2>
+        <p class="subtitle">ඔබ ප්‍රථම වතාවට ඇතුල් වූ බැවින් කරුණාකර නව මුරපදයක් සාදාගන්න.</p>
+
+        <div id="modifyErrorBox" class="error-message"></div>
+
+        <form id="modifyForm" onsubmit="handlePasswordModify(event)">
+            <div class="input-group">
+                <label for="newPassword">නව මුරපදය (New Password)</label>
+                <input type="password" id="newPassword" placeholder="••••••••" required>
+            </div>
+            <div class="input-group">
+                <label for="confirmPassword">නව මුරපදය නැවත (Confirm Password)</label>
+                <input type="password" id="confirmPassword" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="login-btn">සුරැකීමට සහ ඇතුල් වීමට</button>
+        </form>
+    </div>
+
+    <div class="container" id="dashboardContainer">
+        
+        <div class="top-logout-container">
+            <button class="btn-logout" onclick="logout()">Log Out</button>
+        </div>
+
+        <div id="scrHome" class="screen active">
+            <h1>Kekirawa Branch</h1>
+            <div class="welcome-animated">Welcome to Branch Hub</div>
+            <button class="btn" style="width: 180px; padding: 15px;" onclick="showScreen('scrYears')">Enter</button>
+        </div>
+
+        <div id="scrYears" class="screen">
+            <button class="btn btn-back" onclick="showScreen('scrHome')">← Back</button>
+            <div class="sub-title">Select Year</div>
+            <div class="btn-grid">
+                <button class="btn" onclick="showScreen('scrMonths')">2026</button>
+            </div>
+        </div>
+
+        <div id="scrMonths" class="screen">
+            <button class="btn btn-back" onclick="showScreen('scrYears')">← Back</button>
+            <div class="sub-title">Select Month</div>
+            <div class="btn-grid">
+                <button class="btn" onclick="selectMonth('April')">April</button>
+                <button class="btn" onclick="selectMonth('May')">May</button>
+            </div>
+        </div>
+
+        <div id="scrDept" class="screen">
+            <button class="btn btn-back" onclick="showScreen('scrMonths')">← Back</button>
+            <div id="selMonthLabel" class="sub-title"></div>
+            <div class="btn-grid">
+                <button class="btn" onclick="selectDept('Recovery')">Recovery Dashboard</button>
+                <button class="btn" onclick="selectDept('Marketing')">Marketing Dashboard</button>
+            </div>
+        </div>
+
+        <div id="scrOfficers" class="screen">
+            <button class="btn btn-back" onclick="showScreen('scrDept')">← Back</button>
+            <div id="selDeptLabel" class="sub-title">Select Marketing Officer</div>
+            <div id="officerList" class="btn-grid"></div>
+        </div>
+
+        <div id="scrRecCategory" class="screen">
+            <button class="btn btn-back" onclick="showScreen('scrOfficers')">← Back</button>
+            <div id="selOfficerLabel" class="sub-title" style="color:var(--warning);">Category</div>
+            <div class="btn-grid">
+                <button class="btn" id="btnDueLabel" onclick="selectRecCat('due')">Due April Info</button>
+                <button class="btn" onclick="selectRecCat('np')">NP Case Details</button>
+                <button class="btn" onclick="selectRecCat('m6')">06 Month Arrears</button>
+                <button class="btn" onclick="selectRecCat('m12')">12 Month Arrears</button>
+                <button class="btn" onclick="selectRecCat('m18')">18 Month Arrears</button>
+                <button class="btn" onclick="selectRecCat('notPaid')">Not Paid Cases</button>
+            </div>
+        </div>
+
+        <div id="scrFinal" class="screen">
+            <button id="finalBackBtn" class="btn btn-back">← Back</button>
+            <div class="data-card">
+                <h3 id="finalTitle">Result</h3>
+                <div id="finalDataBody"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer-static">
+        <span class="footer-text">Developed by Lahiru Bandara</span>
+    </div>
+
+    <script>
+        // ------------------ IMAGE SLIDER LOGIC (GLOBAL) ------------------
+        let currentSlideIdx = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        // Changed transition interval to 5000ms (5 seconds)
+        setInterval(() => {
+            let nextSlideIdx = (currentSlideIdx + 1) % slides.length;
+            
+            // Current slide exits to right
+            slides[currentSlideIdx].classList.remove('active');
+            slides[currentSlideIdx].classList.add('exit');
+            
+            // Next slide enters from left to center
+            slides[nextSlideIdx].classList.remove('exit');
+            slides[nextSlideIdx].classList.add('active');
+            
+            let prevIdx = currentSlideIdx;
+            setTimeout(() => {
+                if (!slides[prevIdx].classList.contains('active')) {
+                    slides[prevIdx].classList.remove('exit');
+                }
+            }, 800);
+
+            currentSlideIdx = nextSlideIdx;
+        }, 5000); // Transitions perfectly every 5 seconds
+
+
+        // ------------------ LOGIN & USER MANAGEMENT SYSTEM ------------------
+        let usersDatabase = {
+            "chamodya_028": { password: "Kekirawa@028", isDefault: true },
+            "lahiru_028": { password: "Kekirawa@028", isDefault: true },
+            "nalaka_028": { password: "Kekirawa@028", isDefault: true },
+            "hashini_028": { password: "Kekirawa@028", isDefault: true },
+            "madhawa_028": { password: "Kekirawa@028", isDefault: true },
+            "dilki_028": { password: "Kekirawa@028", isDefault: true },
+            "yohan_028": { password: "Kekirawa@028", isDefault: true }
+        };
+
+        let activeUser = ""; 
+
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const usernameInput = document.getElementById('username').value.trim();
+            const passwordInput = document.getElementById('password').value;
+            const errorBox = document.getElementById('errorBox');
+            const successBox = document.getElementById('successBox');
+            const loginBox = document.getElementById('loginBox');
+            const modifyPasswordBox = document.getElementById('modifyPasswordBox');
+            const dashboardContainer = document.getElementById('dashboardContainer');
+
+            errorBox.style.display = 'none';
+            successBox.style.display = 'none';
+
+            if (!usersDatabase.hasOwnProperty(usernameInput)) {
+                errorBox.innerText = "❌ ඇතුලත් කල Username එක වැරදියි! ඔබට අවසර නැත.";
+                errorBox.style.display = 'block';
+                return;
+            }
+
+            if (passwordInput !== usersDatabase[usernameInput].password) {
+                errorBox.innerText = "❌ ඇතුලත් කල Password එක වැරදියි! නැවත උත්සාහ කරන්න.";
+                errorBox.style.display = 'block';
+                document.getElementById('password').value = '';
+                document.getElementById('password').focus();
+                return;
+            }
+
+            activeUser = usernameInput;
+
+            if (usersDatabase[usernameInput].isDefault) {
+                loginBox.style.display = 'none';
+                modifyPasswordBox.style.display = 'block';
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+            } else {
+                loginBox.style.display = 'none';
+                dashboardContainer.style.display = 'flex';
+                showScreen('scrHome');
+                
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+            }
+        }
+
+        function handlePasswordModify(event) {
+            event.preventDefault();
+
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const modifyErrorBox = document.getElementById('modifyErrorBox');
+            const modifyPasswordBox = document.getElementById('modifyPasswordBox');
+            const loginBox = document.getElementById('loginBox');
+            const successBox = document.getElementById('successBox');
+
+            modifyErrorBox.style.display = 'none';
+
+            if (newPassword !== confirmPassword) {
+                modifyErrorBox.innerText = "❌ Password දෙක ගැලපෙන්නේ නැත! නැවත නිවැරදිව ගහන්න.";
+                modifyErrorBox.style.display = 'block';
+                return;
+            }
+
+            usersDatabase[activeUser].password = newPassword;
+            usersDatabase[activeUser].isDefault = false;
+
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+
+            modifyPasswordBox.style.display = 'none';
+            loginBox.style.display = 'block';
+            successBox.innerText = "✅ නව Password එක සාර්ථකව සුරැකිණි! කරුණාකර නව Password එකෙන් ඇතුල් වන්න.";
+            successBox.style.display = 'block';
+        }
+
+        function logout() {
+            document.getElementById('dashboardContainer').style.display = 'none';
+            document.getElementById('loginBox').style.display = 'block';
+            document.getElementById('successBox').style.display = 'none';
+            activeUser = "";
+            showScreen('scrHome');
+        }
+
+        // ------------------ NAVIGATION CONTROL ------------------
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        // ------------------ DATA HUB DATABASE ------------------
+        const allData = {
+            April: {
+                Recovery: [
+                    {
+                        name: "Chamodya Ruwanwalle",
+                        due: { portfolio: "39,670,537.09", facility: "77", dueAmt: "1,694,100.00", collection: "1,698,137.56", ratio: "100.24%", addRev: "-4,037.56" },
+                        np: { count: "1", arrears: "143,613.3", portfolio: "668,850.67", ratio: "0.21%" },
+                        m6: { arrears: "1,092.57", portfolio: "27,428,066.61", ratio: "0.04%" },
+                        m12: { arrears: "145,194.37", portfolio: "39,670,537.09", ratio: "0.37%" },
+                        m18: { arrears: "145,194.37", portfolio: "39,670,537.09", ratio: "0.37%" },
+                        notPaid: { facility: "2", arrears: "143,613.30", portfolio: "1,507,334.37" }
+                    },
+                    {
+                        name: "Lahiru Bandara",
+                        due: { portfolio: "121,905,618.78", facility: "265", dueAmt: "5,684,788.00", collection: "5,148,078.19", ratio: "90.56%", addRev: "536,709.81" },
+                        np: { count: "3", arrears: "433,005.93", portfolio: "1,241,807.75", ratio: "0.35%" },
+                        m6: { arrears: "110,772.05", portfolio: "51,823,732.55", ratio: "2.14%" },
+                        m12: { arrears: "1,221,495.38", portfolio: "117,512,711.90", ratio: "1.04%" },
+                        m18: { arrears: "1,519,130.32", portfolio: "121,846,593.06", ratio: "1.25%" },
+                        notPaid: { facility: "34", arrears: "1,232,346.96", portfolio: "17,195,691.66" }
+                    },
+                    {
+                        name: "Nalaka Upul Kumaratunge",
+                        due: { portfolio: "24,643,650.67", facility: "45", dueAmt: "1,072,222.00", collection: "1,079,544.55", ratio: "100.68%", addRev: "-7,322.55" },
+                        np: { count: "1", arrears: "389,187.42", portfolio: "436,669.17", ratio: "0.89%" },
+                        m12: { arrears: "76,741.93", portfolio: "22,054,841.09", ratio: "0.35%" },
+                        m18: { arrears: "107,373.22", portfolio: "24,206,981.50", ratio: "0.44%" },
+                        notPaid: { facility: "4", arrears: "389,187.42", portfolio: "2,189,533.83" }
+                    },
+                    {
+                        name: "Prabhath Wikramasinghe",
+                        due: { portfolio: "97,439,664.98", facility: "283", dueAmt: "5,856,822.00", collection: "5,357,255.62", ratio: "91.47%", addRev: "499,566.38" },
+                        np: { count: "2", arrears: "512,253.37", portfolio: "937,348.84", ratio: "0.55%" },
+                        m6: { arrears: "N/A", portfolio: "N/A", ratio: "N/A" },
+                        m12: { arrears: "50,308.42", portfolio: "11,591,707.89", ratio: "0.43%" },
+                        m18: { arrears: "640,679.20", portfolio: "57,498,020.70", ratio: "1.11%" },
+                        notPaid: { facility: "38", arrears: "1,356,930.93", portfolio: "12,726,904.48" }
+                    },
+                    {
+                        name: "Yohan Gunarathne",
+                        due: { portfolio: "78,814,794.21", facility: "146", dueAmt: "3,357,049.00", collection: "2,883,302.95", ratio: "85.89%", addRev: "473,746.05" },
+                        np: { count: "2.0", arrears: "167,534.40", portfolio: "42,268,364.53", ratio: "0.40%" },
+                        m6: { arrears: "167,534.40", portfolio: "42,268,364.53", ratio: "3.98%" },
+                        m12: { arrears: "908,014.82", portfolio: "76,010,969.35", ratio: "1.19%" },
+                        m18: { arrears: "989,982.41", portfolio: "78,814,794.21", ratio: "1.26%" },
+                        notPaid: { facility: "27", arrears: "710,099.53", portfolio: "13,998,503.45" }
+                    },
+                    {
+                        name: "Grand Total",
+                        due: { portfolio: "362,474,265.73", facility: "816", dueAmt: "17,664,981.00", collection: "16,166,318.87", ratio: "91.52%", addRev: "1,498,662.13" },
+                        np: { count: "7", arrears: "1,470,060.02", portfolio: "3,284,676.43", ratio: "0.45%" },
+                        m6: { arrears: "297,311.21", portfolio: "131,769,347.86", ratio: "2.26%" },
+                        m12: { arrears: "2,401,754.92", portfolio: "266,840,767.32", ratio: "0.90%" },
+                        m18: { arrears: "3,402,359.52", portfolio: "322,036,927.13", ratio: "1.06%" },
+                        notPaid: { facility: "105", arrears: "3,832,178.14", portfolio: "47,617,967.79" },
+                        isTotal: true
+                    }
+                ],
+                Marketing: [
+                    { name: "Chamodya Ruwanwalle", data: { target: "1,750,000.00", facility: "2", achieve: "1,356,118.59", ratio: "77.49%" } },
+                    { name: "Lahiru Bandara", data: { target: "2,750,000.00", facility: "5", achieve: "2,915,865.00", ratio: "106.03%" } },
+                    { name: "Nalaka Upul Kumaratunge", data: { target: "0.00 (No Target)", facility: "4", achieve: "2,309,475.00", ratio: "N/A" } },
+                    { name: "Yohan Gunarathne", data: { target: "2,500,000.00", facility: "2", achieve: "1,194,395.00", ratio: "47.78%" } },
+                    { name: "Grand Total", data: { target: "15,000,000.00", facility: "13", achieve: "7,775,853.59", ratio: "51.84%" }, isTotal: true }
+                ]
+            },
+            May: {
+                Recovery: [
+                    {
+                        name: "Chamodya Ruwanwalle",
+                        due: { portfolio: "39,903,723.17", facility: "79", dueAmt: "1,754,137.00", collection: "1,674,567.85", ratio: "95.46%", addRev: "79,569.15" },
+                        np: { count: "1", arrears: "163,537.52", portfolio: "680,221.36", ratio: "0.24%" },
+                        m6: { arrears: "1,248.17", portfolio: "26,949,102.81", ratio: "0.00%" },
+                        m12: { arrears: "224,763.52", portfolio: "39,903,723.17", ratio: "0.56%" },
+                        m18: { arrears: "224,763.52", portfolio: "39,903,723.17", ratio: "0.56%" },
+                        notPaid: { facility: "6", arrears: "223,515.35", portfolio: "3,127,207.89" }
+                    },
+                    {
+                        name: "Lahiru Bandara",
+                        due: { portfolio: "121,134,973.30", facility: "269", dueAmt: "5,787,802.00", collection: "5,958,617.29", ratio: "102.95%", addRev: "-170,815.29" },
+                        np: { count: "3.0", arrears: "488,583.93", portfolio: "1,255,618.70", ratio: "0.39%" },
+                        m6: { arrears: "77,364.45", portfolio: "47,998,381.00", ratio: "0.16%" },
+                        m12: { arrears: "965,476.44", portfolio: "113,400,658.13", ratio: "0.85%" },
+                        m18: { arrears: "1,348,315.03", portfolio: "121,075,948.15", ratio: "1.11%" },
+                        notPaid: { facility: "21.", arrears: "934,722.20", portfolio: "9,578,948.67" }
+                    },
+                    {
+                        name: "Nalaka Upul Kumaratunge",
+                        due: { portfolio: "26,244,249.80", facility: "49.", dueAmt: "1,147,760.00", collection: "1,046,560.71", ratio: "91.18%", addRev: "101,199.29" },
+                        np: { count: "1.0", arrears: "406,189.42", portfolio: "12,197,099.35", ratio: "0.93%" },
+                        m6: { arrears: "73,727.35", portfolio: "12,197,099.35", ratio: "0.60%" },
+                        m12: { arrears: "113,760.08", portfolio: "21,292,974.74", ratio: "0.53%" },
+                        m18: { arrears: "191,570.51", portfolio: "25,805,839.58", ratio: "0.74%" },
+                        notPaid: { facility: "8", arrears: "488,709.55", portfolio: "4,879,317.42" }
+                    },
+                    {
+                        name: "Prabhath Wikramasinghe",
+                        due: { portfolio: "92,841,598.56", facility: "275", dueAmt: "5,640,330.00", collection: "5,683,423.00", ratio: "100.76%", addRev: "-43,093.00" },
+                        np: { count: "N/A", arrears: "N/A", portfolio: "N/A", ratio: "N/A" },
+                        m6: { arrears: "0.00", portfolio: "92,841,598.56", ratio: "0.00%" },
+                        m12: { arrears: "13,839.54", portfolio: "1,841,237.48", ratio: "0.75%" },
+                        m18: { arrears: "476,920.53", portfolio: "50,443,146.68", ratio: "0.95%" },
+                        notPaid: { facility: "27", arrears: "1,181,325.77", portfolio: "8,954,106.91" }
+                    },
+                    {
+                        name: "Yohan Gunarathne",
+                        due: { portfolio: "78,163,532.88", facility: "147", dueAmt: "3,477,706.00", collection: "3,479,098.29", ratio: "100.04%", addRev: "-1,392.29" },
+                        np: { count: "1", arrears: "172,128.00", portfolio: "838,876.97", ratio: "0.221%" },
+                        m6: { arrears: "83,415.05", portfolio: "41,172,959.89", ratio: "0.20%" },
+                        m12: { arrears: "821,256.14", portfolio: "72,800,615.64", ratio: "1.13%" },
+                        m18: { arrears: "988,590.12", portfolio: "78,163,532.88", ratio: "1.26" },
+                        notPaid: { facility: "14", arrears: "553,515.42", portfolio: "7,335,246.55" }
+                    },
+                    {
+                        name: "Grand Total",
+                        due: { portfolio: "358,288,077.71", facility: "819", dueAmt: "17,807,735.00", collection: "17,842,267.14", ratio: "100.19%", addRev: "-34,532.14" },
+                        np: { count: "8", arrears: "1,800,500.02", portfolio: "4,159,367.97", ratio: "0.43%" },
+                        m6: { arrears: "235,755.02", portfolio: "128,317,543.05", ratio: "0.18%" },
+                        m12: { arrears: "2,139,095.72", portfolio: "72,800,615.64", ratio: "1.13%" },
+                        m18: { arrears: "3,230,159.71", portfolio: "315,392,190.46", ratio: "1.02%" },
+                        notPaid: { facility: "76", arrears: "3,381,788.33", portfolio: "33,874,827.34" },
+                        isTotal: true
+                    }
+                ],
+                Marketing: [
+                    { name: "Chamodya Ruwanwalle", data: { target: "1,750,000.00", facility: "4", achieve: "2,318,762.27", ratio: "132.50%" } },
+                    { name: "Lahiru Bandara", data: { target: "2,750,000.00", facility: "6", achieve: "3,310,685.00", ratio: "120.39%" } },
+                    { name: "Nalaka Upul Kumaratunge", data: { target: "0.00 (No Target)", facility: "1", achieve: "457,200.00", ratio: "N/A" } },
+                    { name: "Yohan Gunarathne", data: { target: "2,500,000.00", facility: "3", achieve: "1,379,100.00", ratio: "55.16%" } },
+                    { name: "Grand Total", data: { target: "0.00 (No Target)", facility: "14", achieve: "7,465,747.27", ratio: "N/A" }, isTotal: true }
+                ]
+            }
+        };
+
+        let currentMonth = '';
+        let currentDept = '';
+        let currentOfficerIndex = -1;
+
+        function selectMonth(month) {
+            currentMonth = month;
+            document.getElementById('selMonthLabel').innerText = month + " - 2026 Dashboard";
+            document.getElementById('btnDueLabel').innerText = "Due " + month + " Info";
+            showScreen('scrDept');
+        }
+
+        function selectDept(dept) {
+            currentDept = dept;
+            document.getElementById('selDeptLabel').innerText = currentMonth + " " + dept + " Division";
+            const list = document.getElementById('officerList');
+            list.innerHTML = '';
+
+            allData[currentMonth][dept].forEach((off, idx) => {
+                const btn = document.createElement('button');
+                btn.className = off.isTotal ? 'btn btn-total' : 'btn';
+                btn.innerText = off.name;
+                btn.onclick = () => selectOfficer(idx);
+                list.appendChild(btn);
+            });
+            showScreen('scrOfficers');
+        }
+
+        function selectOfficer(idx) {
+            currentOfficerIndex = idx;
+            const officer = allData[currentMonth][currentDept][idx];
+            if(currentDept === 'Recovery') {
+                document.getElementById('selOfficerLabel').innerText = officer.name + " (" + currentMonth + ")";
+                showScreen('scrRecCategory');
+            } else {
+                showMarketingFinal(officer);
+            }
+        }
+
+        function selectRecCat(cat) {
+            const officer = allData[currentMonth].Recovery[currentOfficerIndex];
+            const body = document.getElementById('finalDataBody');
+            const title = document.getElementById('finalTitle');
+            body.innerHTML = '';
+
+            if(cat === 'due') {
+                title.innerText = "Due " + currentMonth + " Breakdown (" + officer.name + ")";
+                body.innerHTML = createRow("Sum of Portfolio", "Rs. " + officer.due.portfolio) +
+                                  createRow("Number of Facility", officer.due.facility) +
+                                  createRow("Rental Due Amount", "Rs. " + officer.due.dueAmt) +
+                                  createRow("Collection", "Rs. " + officer.due.collection) +
+                                  createRow("Ratio", officer.due.ratio) +
+                                  createRow("Cumulative Add / Reversal", "Rs. " + officer.due.addRev);
+            } else if (cat === 'np') {
+                title.innerText = "NP Case Analysis (" + officer.name + ")";
+                body.innerHTML = createRow("NP Count", officer.np.count) +
+                                  createRow("Rental Arrears", "Rs. " + officer.np.arrears) +
+                                  createRow("Portfolio", "Rs. " + officer.np.portfolio) +
+                                  createRow("NP Ratio", officer.np.ratio);
+            } else if (['m6', 'm12', 'm18'].includes(cat)) {
+                const period = cat === 'm6' ? "06 Month Arrears" : cat === 'm12' ? "12 Month Arrears" : "18 Month Arrears";
+                title.innerText = period + " Status (" + officer.name + ")";
+                body.innerHTML = createRow("Rental Arrears", "Rs. " + officer[cat].arrears) +
+                                  createRow("Portfolio", "Rs. " + officer[cat].portfolio) +
+                                  createRow("Ratio", officer[cat].ratio);
+            } else if (cat === 'notPaid') {
+                title.innerText = "Not Paid Summary (" + officer.name + ")";
+                body.innerHTML = createRow("Number of Facility", officer.notPaid.facility) +
+                                  createRow("Sum of Rental Arrears", "Rs. " + officer.notPaid.arrears) +
+                                  createRow("Sum of Portfolio", "Rs. " + officer.notPaid.portfolio);
+            }
+
+            document.getElementById('finalBackBtn').onclick = () => showScreen('scrRecCategory');
+            showScreen('scrFinal');
+        }
+
+        function showMarketingFinal(officer) {
+            const body = document.getElementById('finalDataBody');
+            const title = document.getElementById('finalTitle');
+            title.innerText = officer.name + " - " + currentMonth + " Marketing";
+            body.innerHTML = createRow("Target", "Rs. " + officer.data.target) +
+                             createRow("Number of Facility", officer.data.facility) +
+                             createRow("Achievement", "Rs. " + officer.data.achieve) +
+                             createRow("Ratio (%)", officer.data.ratio);
+
+            document.getElementById('finalBackBtn').onclick = () => showScreen('scrOfficers');
+            showScreen('scrFinal');
+        }
+
+        function createRow(label, value) {
+            return `<div class="data-row"><span class="data-label">${label}</span><span class="data-value">${value}</span></div>`;
+        }
+    </script>
+</body>
+</html>
