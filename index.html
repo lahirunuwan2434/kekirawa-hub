@@ -151,17 +151,6 @@
             animation: shake 0.2s ease-in-out 0s 2;
         }
 
-        .success-message {
-            color: #065f46;
-            background-color: #d1fae5;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 14px;
-            margin-bottom: 20px;
-            display: none;
-            border: 1px solid #a7f3d0;
-        }
-
         @keyframes shake {
             0% { transform: translateX(0); }
             25% { transform: translateX(-5px); }
@@ -282,7 +271,7 @@
         .footer-text {
             font-weight: 800; font-size: 1.2rem; letter-spacing: 2px;
             display: inline-block;
-            color: #38bdf8; /* Single solid color specified by user */
+            color: #38bdf8;
             text-shadow: 0 0 8px rgba(56,189,248,0.3);
         }
     </style>
@@ -301,37 +290,17 @@
         <p class="subtitle">ඉදිරියට යාම සඳහා පරිශීලක නාමය සහ මුරපදය ඇතුළත් කරන්න</p>
 
         <div id="errorBox" class="error-message"></div>
-        <div id="successBox" class="success-message"></div>
 
         <form id="loginForm" onsubmit="handleLogin(event)">
             <div class="input-group">
                 <label for="username">පරිශීලක නාමය (Username)</label>
-                <input type="text" id="username" placeholder="e.g. lahiru_028" required>
+                <input type="text" id="username" placeholder="" required>
             </div>
             <div class="input-group">
                 <label for="password">මුරපදය (Password)</label>
                 <input type="password" id="password" placeholder="••••••••" required>
             </div>
             <button type="submit" class="login-btn">ඇතුළු වන්න</button>
-        </form>
-    </div>
-
-    <div class="login-container" id="modifyPasswordBox" style="display: none;">
-        <h2>මුරපදය වෙනස් කරන්න</h2>
-        <p class="subtitle">ඔබ ප්‍රථම වතාවට ඇතුල් වූ බැවින් කරුණාකර නව මුරපදයක් සාදාගන්න.</p>
-
-        <div id="modifyErrorBox" class="error-message"></div>
-
-        <form id="modifyForm" onsubmit="handlePasswordModify(event)">
-            <div class="input-group">
-                <label for="newPassword">නව මුරපදය (New Password)</label>
-                <input type="password" id="newPassword" placeholder="••••••••" required>
-            </div>
-            <div class="input-group">
-                <label for="confirmPassword">නව මුරපදය නැවත (Confirm Password)</label>
-                <input type="password" id="confirmPassword" placeholder="••••••••" required>
-            </div>
-            <button type="submit" class="login-btn">සුරැකීමට සහ ඇතුල් වීමට</button>
         </form>
     </div>
 
@@ -411,15 +380,12 @@
         let currentSlideIdx = 0;
         const slides = document.querySelectorAll('.slide');
 
-        // Changed transition interval to 5000ms (5 seconds)
         setInterval(() => {
             let nextSlideIdx = (currentSlideIdx + 1) % slides.length;
             
-            // Current slide exits to right
             slides[currentSlideIdx].classList.remove('active');
             slides[currentSlideIdx].classList.add('exit');
             
-            // Next slide enters from left to center
             slides[nextSlideIdx].classList.remove('exit');
             slides[nextSlideIdx].classList.add('active');
             
@@ -431,18 +397,18 @@
             }, 800);
 
             currentSlideIdx = nextSlideIdx;
-        }, 5000); // Transitions perfectly every 5 seconds
+        }, 5000);
 
 
         // ------------------ LOGIN & USER MANAGEMENT SYSTEM ------------------
-        let usersDatabase = {
-            "chamodya_028": { password: "Kekirawa@028", isDefault: true },
-            "lahiru_028": { password: "Kekirawa@028", isDefault: true },
-            "nalaka_028": { password: "Kekirawa@028", isDefault: true },
-            "hashini_028": { password: "Kekirawa@028", isDefault: true },
-            "madhawa_028": { password: "Kekirawa@028", isDefault: true },
-            "dilki_028": { password: "Kekirawa@028", isDefault: true },
-            "yohan_028": { password: "Kekirawa@028", isDefault: true }
+        const usersDatabase = {
+            "chamodya_028": { password: "ch@kw028" },
+            "lahiru_028": { password: "la@kw028" },
+            "nalaka_028": { password: "na@kw028" },
+            "hashini_028": { password: "ha@kw028" },
+            "madhawa_028": { password: "ma@kw028" },
+            "dilki_028": { password: "di@kw028" },
+            "yohan_028": { password: "yo@kw028" }
         };
 
         let activeUser = ""; 
@@ -453,13 +419,10 @@
             const usernameInput = document.getElementById('username').value.trim();
             const passwordInput = document.getElementById('password').value;
             const errorBox = document.getElementById('errorBox');
-            const successBox = document.getElementById('successBox');
             const loginBox = document.getElementById('loginBox');
-            const modifyPasswordBox = document.getElementById('modifyPasswordBox');
             const dashboardContainer = document.getElementById('dashboardContainer');
 
             errorBox.style.display = 'none';
-            successBox.style.display = 'none';
 
             if (!usersDatabase.hasOwnProperty(usernameInput)) {
                 errorBox.innerText = "❌ ඇතුලත් කල Username එක වැරදියි! ඔබට අවසර නැත.";
@@ -477,55 +440,18 @@
 
             activeUser = usernameInput;
 
-            if (usersDatabase[usernameInput].isDefault) {
-                loginBox.style.display = 'none';
-                modifyPasswordBox.style.display = 'block';
-                document.getElementById('username').value = '';
-                document.getElementById('password').value = '';
-            } else {
-                loginBox.style.display = 'none';
-                dashboardContainer.style.display = 'flex';
-                showScreen('scrHome');
-                
-                document.getElementById('username').value = '';
-                document.getElementById('password').value = '';
-            }
-        }
-
-        function handlePasswordModify(event) {
-            event.preventDefault();
-
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const modifyErrorBox = document.getElementById('modifyErrorBox');
-            const modifyPasswordBox = document.getElementById('modifyPasswordBox');
-            const loginBox = document.getElementById('loginBox');
-            const successBox = document.getElementById('successBox');
-
-            modifyErrorBox.style.display = 'none';
-
-            if (newPassword !== confirmPassword) {
-                modifyErrorBox.innerText = "❌ Password දෙක ගැලපෙන්නේ නැත! නැවත නිවැරදිව ගහන්න.";
-                modifyErrorBox.style.display = 'block';
-                return;
-            }
-
-            usersDatabase[activeUser].password = newPassword;
-            usersDatabase[activeUser].isDefault = false;
-
-            document.getElementById('newPassword').value = '';
-            document.getElementById('confirmPassword').value = '';
-
-            modifyPasswordBox.style.display = 'none';
-            loginBox.style.display = 'block';
-            successBox.innerText = "✅ නව Password එක සාර්ථකව සුරැකිණි! කරුණාකර නව Password එකෙන් ඇතුල් වන්න.";
-            successBox.style.display = 'block';
+            // Direct Login without password modification screen
+            loginBox.style.display = 'none';
+            dashboardContainer.style.display = 'flex';
+            showScreen('scrHome');
+            
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
         }
 
         function logout() {
             document.getElementById('dashboardContainer').style.display = 'none';
             document.getElementById('loginBox').style.display = 'block';
-            document.getElementById('successBox').style.display = 'none';
             activeUser = "";
             showScreen('scrHome');
         }
