@@ -219,13 +219,6 @@
         }
         .btn-total:hover { background: linear-gradient(135deg, #059669, #047857); }
 
-        .btn-back {
-            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
-            width: auto; margin-bottom: 20px; align-self: flex-start; padding: 8px 18px; font-size: 0.9rem;
-            border-radius: 8px; box-shadow: none;
-        }
-        .btn-back:hover { background: rgba(255,255,255,0.18); transform: none; box-shadow: none; }
-
         /* Top Bar Logout */
         .top-logout-container {
             position: absolute;
@@ -261,7 +254,7 @@
         .data-label { color: #cbd5e1; font-weight: 500; }
         .data-value { color: #ffffff; font-weight: bold; font-size: 1.1rem; }
 
-        /* FIXED STATIC FOOTER (ONE SOLID COLOR) */
+        /* FIXED STATIC FOOTER (MIXED WITH WHITE AND GREY) */
         .footer-static {
             position: fixed; bottom: 0; left: 0; width: 100%;
             background: rgba(15, 23, 42, 0.85); border-top: 1px solid rgba(255,255,255,0.05);
@@ -271,8 +264,10 @@
         .footer-text {
             font-weight: 800; font-size: 1.2rem; letter-spacing: 2px;
             display: inline-block;
-            color: #38bdf8;
-            text-shadow: 0 0 8px rgba(56,189,248,0.3);
+            background: linear-gradient(135deg, #e2e8f0 0%, #ffffff 50%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
     </style>
 </head>
@@ -282,6 +277,8 @@
         <div class="slide active" style="background-image: url('https://www.allceylon.lk/images/location/2016/04/Avukana-Buddha-Statue-Anuradhapura-1461592473.jpeg');"></div>
         <div class="slide" style="background-image: url('https://www.srilankansafari.com/images/kala-wewa-national-park-1.jpg');"></div>
         <div class="slide" style="background-image: url('https://roamio.lk/gis-api/uploads/google/photo_ChIJ9woQ51GW_DoRrce6frqmvvU_0.jpg');"></div>
+        <div class="slide" style="background-image: url('https://cdn.sanity.io/images/7ftw29l3/production/6f1be57a1eed42b3f3a39e5ecba96241b7750dbe-2000x2000.jpg?w=640&q=75&fit=clip&auto=format');"></div>
+        <div class="slide" style="background-image: url('https://media-cdn.tripadvisor.com/media/attractions-splice-spp-720x480/0b/19/65/a5.jpg');"></div>
     </div>
     <div class="bg-overlay"></div>
 
@@ -313,19 +310,17 @@
         <div id="scrHome" class="screen active">
             <h1>Kekirawa Branch</h1>
             <div class="welcome-animated">Welcome to Branch Hub</div>
-            <button class="btn" style="width: 180px; padding: 15px;" onclick="showScreen('scrYears')">Enter</button>
+            <button class="btn" style="width: 180px; padding: 15px;" onclick="navigateTo('scrYears')">Enter</button>
         </div>
 
         <div id="scrYears" class="screen">
-            <button class="btn btn-back" onclick="showScreen('scrHome')">← Back</button>
             <div class="sub-title">Select Year</div>
             <div class="btn-grid">
-                <button class="btn" onclick="showScreen('scrMonths')">2026</button>
+                <button class="btn" onclick="navigateTo('scrMonths')">2026</button>
             </div>
         </div>
 
         <div id="scrMonths" class="screen">
-            <button class="btn btn-back" onclick="showScreen('scrYears')">← Back</button>
             <div class="sub-title">Select Month</div>
             <div class="btn-grid">
                 <button class="btn" onclick="selectMonth('April')">April</button>
@@ -334,7 +329,6 @@
         </div>
 
         <div id="scrDept" class="screen">
-            <button class="btn btn-back" onclick="showScreen('scrMonths')">← Back</button>
             <div id="selMonthLabel" class="sub-title"></div>
             <div class="btn-grid">
                 <button class="btn" onclick="selectDept('Recovery')">Recovery Dashboard</button>
@@ -343,13 +337,11 @@
         </div>
 
         <div id="scrOfficers" class="screen">
-            <button class="btn btn-back" onclick="showScreen('scrDept')">← Back</button>
             <div id="selDeptLabel" class="sub-title">Select Marketing Officer</div>
             <div id="officerList" class="btn-grid"></div>
         </div>
 
         <div id="scrRecCategory" class="screen">
-            <button class="btn btn-back" onclick="showScreen('scrOfficers')">← Back</button>
             <div id="selOfficerLabel" class="sub-title" style="color:var(--warning);">Category</div>
             <div class="btn-grid">
                 <button class="btn" id="btnDueLabel" onclick="selectRecCat('due')">Due April Info</button>
@@ -362,7 +354,6 @@
         </div>
 
         <div id="scrFinal" class="screen">
-            <button id="finalBackBtn" class="btn btn-back">← Back</button>
             <div class="data-card">
                 <h3 id="finalTitle">Result</h3>
                 <div id="finalDataBody"></div>
@@ -442,6 +433,9 @@
 
             loginBox.style.display = 'none';
             dashboardContainer.style.display = 'flex';
+            
+            // Clear history state and initiate navigation state
+            history.pushState({ screenId: 'scrHome' }, '');
             showScreen('scrHome');
             
             document.getElementById('username').value = '';
@@ -452,14 +446,36 @@
             document.getElementById('dashboardContainer').style.display = 'none';
             document.getElementById('loginBox').style.display = 'block';
             activeUser = "";
-            showScreen('scrHome');
+            // Reset history state upon logging out
+            history.pushState(null, '');
         }
 
-        // ------------------ NAVIGATION CONTROL ------------------
+        // ------------------ PHONE BACK BUTTON NAVIGATION LOGIC ------------------
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
+            const targetScreen = document.getElementById(id);
+            if(targetScreen) {
+                targetScreen.classList.add('active');
+            }
         }
+
+        function navigateTo(id) {
+            history.pushState({ screenId: id }, '');
+            showScreen(id);
+        }
+
+        // Listen for the phone/browser back button event
+        window.addEventListener('popstate', function(event) {
+            if (activeUser !== "") {
+                if (event.state && event.state.screenId) {
+                    showScreen(event.state.screenId);
+                } else {
+                    // Fallback default state if no specific state found
+                    showScreen('scrHome');
+                    history.pushState({ screenId: 'scrHome' }, '');
+                }
+            }
+        });
 
         // ------------------ DATA HUB DATABASE ------------------
         const allData = {
@@ -604,7 +620,7 @@
             currentMonth = month;
             document.getElementById('selMonthLabel').innerText = month + " - 2026 Dashboard";
             document.getElementById('btnDueLabel').innerText = "Due " + month + " Info";
-            showScreen('scrDept');
+            navigateTo('scrDept');
         }
 
         function selectDept(dept) {
@@ -620,7 +636,7 @@
                 btn.onclick = () => selectOfficer(idx);
                 list.appendChild(btn);
             });
-            showScreen('scrOfficers');
+            navigateTo('scrOfficers');
         }
 
         function selectOfficer(idx) {
@@ -628,7 +644,7 @@
             const officer = allData[currentMonth][currentDept][idx];
             if(currentDept === 'Recovery') {
                 document.getElementById('selOfficerLabel').innerText = officer.name + " (" + currentMonth + ")";
-                showScreen('scrRecCategory');
+                navigateTo('scrRecCategory');
             } else {
                 showMarketingFinal(officer);
             }
@@ -667,8 +683,7 @@
                                   createRow("Sum of Portfolio", "Rs. " + officer.notPaid.portfolio);
             }
 
-            document.getElementById('finalBackBtn').onclick = () => showScreen('scrRecCategory');
-            showScreen('scrFinal');
+            navigateTo('scrFinal');
         }
 
         function showMarketingFinal(officer) {
@@ -680,8 +695,7 @@
                              createRow("Achievement", "Rs. " + officer.data.achieve) +
                              createRow("Ratio (%)", officer.data.ratio);
 
-            document.getElementById('finalBackBtn').onclick = () => showScreen('scrOfficers');
-            showScreen('scrFinal');
+            navigateTo('scrFinal');
         }
 
         function createRow(label, value) {
