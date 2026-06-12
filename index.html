@@ -131,8 +131,17 @@
             box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
         }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(2, 132, 199, 0.4); }
-        .btn-total { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
-        .btn-total:hover { background: linear-gradient(135deg, #059669, #047857); }
+        
+        /* TOTAL BUTTON STYLING */
+        .btn-total-summary {
+            background: linear-gradient(135deg, #10b981, #059669) !important;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3) !important;
+            border: 1px solid #34d399 !important;
+        }
+        .btn-total-summary:hover {
+            background: linear-gradient(135deg, #059669, #047857) !important;
+            box-shadow: 0 6px 18px rgba(16, 185, 129, 0.5) !important;
+        }
 
         .btn-back {
             background: linear-gradient(135deg, #64748b, #475569);
@@ -147,7 +156,7 @@
         .btn-logout { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
         .btn-logout:hover { background: linear-gradient(135deg, #dc2626, #b91c1c); }
 
-        /* DATA PRESENTATION TABLES (MODIFIED FOR JUNE GRID) */
+        /* DATA PRESENTATION TABLES */
         .data-card {
             background: var(--card-bg); backdrop-filter: blur(12px);
             border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
@@ -162,6 +171,9 @@
         .june-table th { background-color: rgba(2, 132, 199, 0.8); color: white; font-weight: 600; }
         .june-table tr:nth-child(even) { background-color: rgba(255,255,255,0.03); }
         .june-table tr:hover { background-color: rgba(2, 132, 199, 0.2); }
+
+        /* Custom style for the Total row in final view if needed */
+        .total-highlight { background-color: rgba(16, 185, 129, 0.15) !important; color: #10b981 !important; }
 
         .data-body-wrapper { width: 100%; }
         .data-row { display: flex; justify-content: space-between; padding: 12px 5px; border-bottom: 1px solid rgba(255,255,255,0.06); }
@@ -353,7 +365,7 @@
             }
         }
 
-        // June Report.xls හි සම්පූර්ණ දත්ත ඇතුළත් June Database එක
+        // June Report.xls හි සම්පූර්ණ සහ නිවැරදි දත්ත (Total ඇතුළුව)
         const juneDataset = {
             "Chamodya Ruwanwalle": {
                 "due": [
@@ -499,6 +511,36 @@
                     { "Parameter": "Te be Collect", "Value": "558,443.97" },
                     { "Parameter": "Per Day", "Value": "558,443.97" }
                 ]
+            },
+            /* අලුතින් එකතු කරන ලද මුළු එකතුව (Total / Grand Total) */
+            "Total Summary": {
+                "due": [
+                    { "Parameter": "Total Count", "Value": "820" },
+                    { "Parameter": "Sum of June Rental Due Amount", "Value": "18,109,717" },
+                    { "Parameter": "Sum of June Month beginning Total Rental Arrears", "Value": "23,165,413.75" },
+                    { "Parameter": "Sum of Rental Arrears 09-06-2026", "Value": "16,591,898.91" },
+                    { "Parameter": "Sum of Rental Arrears 10-06-2026", "Value": "16,031,555.82" },
+                    { "Parameter": "Yesterday Collection", "Value": "560,343.09" },
+                    { "Parameter": "Total Collection", "Value": "7,133,857.93" },
+                    { "Parameter": "Ratio", "Value": "39.39%" },
+                    { "Parameter": "To Be", "Value": "10,975,859.07" }
+                ],
+                "monthly": [
+                    { "Parameter": "Total Count", "Value": "820" },
+                    { "Parameter": "Sum of June Rental Target Amount", "Value": "18,441,717" },
+                    { "Parameter": "Sum of June Month Collection", "Value": "7,133,857.93" },
+                    { "Parameter": "Ratio", "Value": "38.68%" },
+                    { "Parameter": "Te be Collect", "Value": "11,307,859.07" },
+                    { "Parameter": "Per Day", "Value": "1,027,987.19" }
+                ],
+                "weekly": [
+                    { "Parameter": "Total Count", "Value": "820" },
+                    { "Parameter": "Sum of Weekly Target", "Value": "8,667,606.99" },
+                    { "Parameter": "Sum of June Month Collection", "Value": "7,133,857.93" },
+                    { "Parameter": "Ratio", "Value": "82.30%" },
+                    { "Parameter": "Te be Collect", "Value": "1,533,749.06" },
+                    { "Parameter": "Per Day", "Value": "1,533,749.06" }
+                ]
             }
         };
 
@@ -543,15 +585,23 @@
         function selectMonth(month) {
             currentMonth = month;
             if (month === 'June') {
-                // June තෝරාගත් විට කෙලින්ම Marketing Officers ලැයිස්තුවට යයි (Recovery/Marketing තේරීමක් June වල නැති බැවින්)
                 document.getElementById('selDeptLabel').innerText = "June - Marketing Officers";
                 const list = document.getElementById('officerList');
                 list.innerHTML = '';
 
+                // Marketing Officers ලැයිස්තුව සාදයි (Total Summary දත්ත වෙනම බටන් එකක් ලෙස අගට එකතු කර ඇත)
                 Object.keys(juneDataset).forEach(name => {
                     const btn = document.createElement('button');
                     btn.className = 'btn';
-                    btn.innerText = name;
+                    
+                    // Total සඳහා විශේෂ කොළ පැහැති පෙනුමක් ලබාදීම
+                    if (name === "Total Summary") {
+                        btn.innerText = "📊 " + name;
+                        btn.classList.add('btn-total-summary');
+                    } else {
+                        btn.innerText = name;
+                    }
+
                     btn.onclick = () => {
                         selectedJuneOfficer = name;
                         document.getElementById('juneOfficerLabel').innerText = name + " - Performance Categories";
@@ -561,7 +611,6 @@
                 });
                 navigateTo('scrOfficers');
             } else {
-                // April, May සඳහා සාමාන්‍ය පද්ධතිය ක්‍රියා කරයි
                 document.getElementById('selMonthLabel').innerText = month + " - 2026 Dashboard";
                 document.getElementById('btnDueLabel').innerText = "Due " + month + " Info";
                 navigateTo('scrDept');
@@ -586,7 +635,6 @@
 
                     if(currentDept === 'Recovery') {
                         document.getElementById('selOfficerLabel').innerText = officer.name + " (" + currentMonth + ")";
-                        // Recovery සඳහා පැරණි Logic එක ක්‍රියාත්මක වේ
                         window.currentOfficerIdxLegacy = idx; 
                         navigateTo('scrRecCategory');
                     } else {
@@ -603,7 +651,6 @@
             navigateTo('scrOfficers');
         }
 
-        // Legacy Recovery Categories[cite: 1]
         function selectRecCat(cat) {
             const officer = allData[currentMonth].Recovery[window.currentOfficerIdxLegacy];
             const body = document.getElementById('finalDataBody');
@@ -626,7 +673,7 @@
             navigateTo('scrFinal');
         }
 
-        // June මාසයේ කොටස් 3 ක්ලික් කළ විට ලස්සන වගුවක් ලෙස පෙන්වන ශ්‍රිතය (Table View)[cite: 1]
+        // June මාසයේ දත්ත ලස්සන වගුවක් ලෙස පෙන්වන ශ්‍රිතය
         function selectJuneCategory(categoryType) {
             const body = document.getElementById('finalDataBody');
             const title = document.getElementById('finalTitle');
@@ -641,7 +688,6 @@
 
             const rowsData = juneDataset[selectedJuneOfficer][categoryType];
             
-            // June සදහා වගු දර්ශනයක් (Responsive Table) නිර්මාණය කිරීම
             let tableHtml = `<div class="table-responsive">
                                 <table class="june-table">
                                     <thead>
@@ -653,7 +699,8 @@
                                     <tbody>`;
             
             rowsData.forEach(row => {
-                tableHtml += `<tr>
+                let rowStyle = (selectedJuneOfficer === "Total Summary") ? 'class="total-highlight"' : '';
+                tableHtml += `<tr ${rowStyle}>
                                 <td><strong>${row.Parameter}</strong></td>
                                 <td>${row.Value}</td>
                              </tr>`;
