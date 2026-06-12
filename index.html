@@ -254,7 +254,7 @@
         .data-label { color: #cbd5e1; font-weight: 500; }
         .data-value { color: #ffffff; font-weight: bold; font-size: 1.1rem; }
 
-        /* FIXED STATIC FOOTER (MIXED WITH WHITE AND GREY) */
+        /* FIXED STATIC FOOTER */
         .footer-static {
             position: fixed; bottom: 0; left: 0; width: 100%;
             background: rgba(15, 23, 42, 0.85); border-top: 1px solid rgba(255,255,255,0.05);
@@ -434,8 +434,8 @@
             loginBox.style.display = 'none';
             dashboardContainer.style.display = 'flex';
             
-            // Clear history state and initiate navigation state
-            history.pushState({ screenId: 'scrHome' }, '');
+            // Login වුන ගමන් මුල්ම state එක history එකට replace කරනවා
+            history.replaceState({ screenId: 'scrHome' }, '');
             showScreen('scrHome');
             
             document.getElementById('username').value = '';
@@ -446,7 +446,6 @@
             document.getElementById('dashboardContainer').style.display = 'none';
             document.getElementById('loginBox').style.display = 'block';
             activeUser = "";
-            // Reset history state upon logging out
             history.pushState(null, '');
         }
 
@@ -460,19 +459,19 @@
         }
 
         function navigateTo(id) {
+            // හැම navigation එකකදීම අලුත් state එකක් ඉතිහාසයට එකතු කරනවා
             history.pushState({ screenId: id }, '');
             showScreen(id);
         }
 
-        // Listen for the phone/browser back button event
+        // Phone එකේ back button එක ඔබන කොට වැඩ කරන කොටස
         window.addEventListener('popstate', function(event) {
             if (activeUser !== "") {
                 if (event.state && event.state.screenId) {
                     showScreen(event.state.screenId);
                 } else {
-                    // Fallback default state if no specific state found
+                    // කිසිම state එකක් නැත්නම් මුල් පිටුවට (scrHome) යනවා
                     showScreen('scrHome');
-                    history.pushState({ screenId: 'scrHome' }, '');
                 }
             }
         });
