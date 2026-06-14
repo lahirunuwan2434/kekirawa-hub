@@ -32,7 +32,6 @@
             position: relative;
         }
 
-        /* GLOBAL BACKGROUND SLIDER */
         .slider-container {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -59,7 +58,6 @@
         .slide.active { opacity: 1; transform: translateX(0); }
         .slide.exit { opacity: 0; transform: translateX(100%); }
 
-        /* LOGIN SCREEN STYLES */
         .login-container {
             background: rgba(255, 255, 255, 0.93);
             backdrop-filter: blur(8px);
@@ -101,7 +99,6 @@
             100% { transform: translateX(0); }
         }
 
-        /* MAIN HUB STYLES */
         .container {
             max-width: 1000px; margin: 0 auto; padding: 20px; width: 100%; height: 92vh;
             display: none; flex-direction: column; position: relative;
@@ -132,7 +129,6 @@
         }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(2, 132, 199, 0.4); }
         
-        /* TOTAL BUTTON STYLING */
         .btn-total-summary {
             background: linear-gradient(135deg, #10b981, #059669) !important;
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3) !important;
@@ -156,7 +152,6 @@
         .btn-logout { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
         .btn-logout:hover { background: linear-gradient(135deg, #dc2626, #b91c1c); }
 
-        /* DATA PRESENTATION TABLES */
         .data-card {
             background: var(--card-bg); backdrop-filter: blur(12px);
             border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
@@ -172,7 +167,6 @@
         .june-table tr:nth-child(even) { background-color: rgba(255,255,255,0.03); }
         .june-table tr:hover { background-color: rgba(2, 132, 199, 0.2); }
 
-        /* Custom style for the Total row in final view if needed */
         .total-highlight { background-color: rgba(16, 185, 129, 0.15) !important; color: #10b981 !important; }
 
         .data-body-wrapper { width: 100%; }
@@ -217,7 +211,6 @@
     </div>
 
     <div class="container" id="dashboardContainer">
-        
         <div class="top-logout-container">
             <button class="btn-logout" onclick="logout()">Log Out</button>
         </div>
@@ -256,12 +249,11 @@
         </div>
 
         <div id="scrOfficers" class="screen">
-            <div id="selDeptLabel" class="sub-title">Select Marketing Officer</div>
+            <div id="selDeptLabel" class="sub-title">Select Officer</div>
             <div id="officerList" class="btn-grid"></div>
             <button class="btn-back" onclick="goBack()">&larr;</button>
         </div>
 
-        <!-- June මාසය සඳහා වන විශේෂිත Target Selection තිරය -->
         <div id="scrJuneTargets" class="screen">
             <div id="juneOfficerLabel" class="sub-title" style="color:var(--warning);">Select Performance Area</div>
             <div class="btn-grid">
@@ -292,7 +284,6 @@
                 <button class="btn-back" onclick="goBack()">&larr;</button>
             </div>
         </div>
-
     </div>
 
     <div class="footer-static">
@@ -300,7 +291,6 @@
     </div>
 
     <script>
-        // IMAGE SLIDER LOGIC
         let currentSlideIdx = 0;
         const slides = document.querySelectorAll('.slide');
         setInterval(() => {
@@ -314,7 +304,6 @@
             currentSlideIdx = nextSlideIdx;
         }, 5000);
 
-        // LOGIN SYSTEM
         const usersDatabase = {
             "chamodya_028": { password: "ch@kw028" },
             "lahiru_028": { password: "la@kw028" },
@@ -365,186 +354,39 @@
             }
         }
 
-        // June Report.xls හි සම්පූර්ණ සහ නිවැරදි දත්ත (Total ඇතුළුව)
         const juneDataset = {
             "Chamodya Ruwanwalle": {
-                "due": [
-                    { "Parameter": "Count", "Value": "82" },
-                    { "Parameter": "Sum of June Rental Due Amount", "Value": "1,835,273" },
-                    { "Parameter": "Sum of June Month beginning Total Arrears", "Value": "2,060,036.52" },
-                    { "Parameter": "Sum of Rental Arrears 09-06-2026", "Value": "1,298,250.40" },
-                    { "Parameter": "Sum of Rental Arrears 10-06-2026", "Value": "1,258,058.17" },
-                    { "Parameter": "Yesterday Collection", "Value": "40,192.23" },
-                    { "Parameter": "Total Collection", "Value": "801,978.35" },
-                    { "Parameter": "Ratio", "Value": "43.70%" },
-                    { "Parameter": "To Be", "Value": "1,033,294.65" }
-                ],
-                "monthly": [
-                    { "Parameter": "Count", "Value": "82" },
-                    { "Parameter": "Sum of June Rental Target Amount", "Value": "1,865,273" },
-                    { "Parameter": "Sum of June Month Collection", "Value": "801,978.35" },
-                    { "Parameter": "Ratio", "Value": "43.00%" },
-                    { "Parameter": "Te be Collect", "Value": "1,063,294.65" },
-                    { "Parameter": "Per Day", "Value": "96,663.15" }
-                ],
-                "weekly": [
-                    { "Parameter": "Count", "Value": "82" },
-                    { "Parameter": "Sum of Weekly Target", "Value": "876,678.31" },
-                    { "Parameter": "Sum of June Month Collection", "Value": "801,978.35" },
-                    { "Parameter": "Ratio", "Value": "91.48%" },
-                    { "Parameter": "Te be Collect", "Value": "74,699.96" },
-                    { "Parameter": "Per Day", "Value": "74,699.96" }
-                ]
+                "due": [{ "Parameter": "Count", "Value": "82" }, { "Parameter": "Sum of June Rental Due Amount", "Value": "1,835,273" }, { "Parameter": "Sum of June Month beginning Total Arrears", "Value": "2,060,036.52" }, { "Parameter": "Sum of Rental Arrears 09-06-2026", "Value": "1,298,250.40" }, { "Parameter": "Sum of Rental Arrears 10-06-2026", "Value": "1,258,058.17" }, { "Parameter": "Yesterday Collection", "Value": "40,192.23" }, { "Parameter": "Total Collection", "Value": "801,978.35" }, { "Parameter": "Ratio", "Value": "43.70%" }, { "Parameter": "To Be", "Value": "1,033,294.65" }],
+                "monthly": [{ "Parameter": "Count", "Value": "82" }, { "Parameter": "Sum of June Rental Target Amount", "Value": "1,865,273" }, { "Parameter": "Sum of June Month Collection", "Value": "801,978.35" }, { "Parameter": "Ratio", "Value": "43.00%" }, { "Parameter": "Te be Collect", "Value": "1,063,294.65" }, { "Parameter": "Per Day", "Value": "96,663.15" }],
+                "weekly": [{ "Parameter": "Count", "Value": "82" }, { "Parameter": "Sum of Weekly Target", "Value": "876,678.31" }, { "Parameter": "Sum of June Month Collection", "Value": "801,978.35" }, { "Parameter": "Ratio", "Value": "91.48%" }, { "Parameter": "Te be Collect", "Value": "74,699.96" }, { "Parameter": "Per Day", "Value": "74,699.96" }]
             },
             "Lahiru Bandara": {
-                "due": [
-                    { "Parameter": "Count", "Value": "271" },
-                    { "Parameter": "Sum of June Rental Due Amount", "Value": "5,937,139" },
-                    { "Parameter": "Sum of June Month beginning Total Arrears", "Value": "7,344,479.18" },
-                    { "Parameter": "Sum of Rental Arrears 09-06-2026", "Value": "4,988,711.45" },
-                    { "Parameter": "Sum of Rental Arrears 10-06-2026", "Value": "4,826,657.79" },
-                    { "Parameter": "Yesterday Collection", "Value": "162,053.66" },
-                    { "Parameter": "Total Collection", "Value": "2,517,821.39" },
-                    { "Parameter": "Ratio", "Value": "42.41%" },
-                    { "Parameter": "To Be", "Value": "3,419,317.61" }
-                ],
-                "monthly": [
-                    { "Parameter": "Count", "Value": "271" },
-                    { "Parameter": "Sum of June Rental Target Amount", "Value": "6,017,139" },
-                    { "Parameter": "Sum of June Month Collection", "Value": "2,517,821.39" },
-                    { "Parameter": "Ratio", "Value": "41.84%" },
-                    { "Parameter": "Te be Collect", "Value": "3,499,317.61" },
-                    { "Parameter": "Per Day", "Value": "318,119.78" }
-                ],
-                "weekly": [
-                    { "Parameter": "Count", "Value": "271" },
-                    { "Parameter": "Sum of Weekly Target", "Value": "2,828,055.33" },
-                    { "Parameter": "Sum of June Month Collection", "Value": "2,517,821.39" },
-                    { "Parameter": "Ratio", "Value": "89.03%" },
-                    { "Parameter": "Te be Collect", "Value": "310,233.94" },
-                    { "Parameter": "Per Day", "Value": "310,233.94" }
-                ]
+                "due": [{ "Parameter": "Count", "Value": "271" }, { "Parameter": "Sum of June Rental Due Amount", "Value": "5,937,139" }, { "Parameter": "Sum of June Month beginning Total Arrears", "Value": "7,344,479.18" }, { "Parameter": "Sum of Rental Arrears 09-06-2026", "Value": "4,988,711.45" }, { "Parameter": "Sum of Rental Arrears 10-06-2026", "Value": "4,826,657.79" }, { "Parameter": "Yesterday Collection", "Value": "162,053.66" }, { "Parameter": "Total Collection", "Value": "2,517,821.39" }, { "Parameter": "Ratio", "Value": "42.41%" }, { "Parameter": "To Be", "Value": "3,419,317.61" }],
+                "monthly": [{ "Parameter": "Count", "Value": "271" }, { "Parameter": "Sum of June Rental Target Amount", "Value": "6,017,139" }, { "Parameter": "Sum of June Month Collection", "Value": "2,517,821.39" }, { "Parameter": "Ratio", "Value": "41.84%" }, { "Parameter": "Te be Collect", "Value": "3,499,317.61" }, { "Parameter": "Per Day", "Value": "318,119.78" }],
+                "weekly": [{ "Parameter": "Count", "Value": "271" }, { "Parameter": "Sum of Weekly Target", "Value": "2,828,055.33" }, { "Parameter": "Sum of June Month Collection", "Value": "2,517,821.39" }, { "Parameter": "Ratio", "Value": "89.03%" }, { "Parameter": "Te be Collect", "Value": "310,233.94" }, { "Parameter": "Per Day", "Value": "310,233.94" }]
             },
             "Nalaka Upul Kumaratunge": {
-                "due": [
-                    { "Parameter": "Count", "Value": "49" },
-                    { "Parameter": "Sum of June Rental Due Amount", "Value": "1,217,098" },
-                    { "Parameter": "Sum of June Month beginning Total Arrears", "Value": "1,814,857.93" },
-                    { "Parameter": "Sum of Rental Arrears 09-06-2026", "Value": "1,239,125.39" },
-                    { "Parameter": "Sum of Rental Arrears 10-06-2026", "Value": "1,181,307.35" },
-                    { "Parameter": "Yesterday Collection", "Value": "57,818.04" },
-                    { "Parameter": "Total Collection", "Value": "633,550.58" },
-                    { "Parameter": "Ratio", "Value": "52.05%" },
-                    { "Parameter": "To Be", "Value": "583,547.42" }
-                ],
-                "monthly": [
-                    { "Parameter": "Count", "Value": "49" },
-                    { "Parameter": "Sum of June Rental Target Amount", "Value": "1,247,098" },
-                    { "Parameter": "Sum of June Month Collection", "Value": "633,550.58" },
-                    { "Parameter": "Ratio", "Value": "50.80%" },
-                    { "Parameter": "Te be Collect", "Value": "613,547.42" },
-                    { "Parameter": "Per Day", "Value": "55,777.04" }
-                ],
-                "weekly": [
-                    { "Parameter": "Count", "Value": "49" },
-                    { "Parameter": "Sum of Weekly Target", "Value": "586,136.06" },
-                    { "Parameter": "Sum of June Month Collection", "Value": "633,550.58" },
-                    { "Parameter": "Ratio", "Value": "108.09%" },
-                    { "Parameter": "Te be Collect", "Value": "-47,414.52" },
-                    { "Parameter": "Per Day", "Value": "-47,414.52" }
-                ]
+                "due": [{ "Parameter": "Count", "Value": "49" }, { "Parameter": "Sum of June Rental Due Amount", "Value": "1,217,098" }, { "Parameter": "Sum of June Month beginning Total Arrears", "Value": "1,814,857.93" }, { "Parameter": "Sum of Rental Arrears 09-06-2026", "Value": "1,239,125.39" }, { "Parameter": "Sum of Rental Arrears 10-06-2026", "Value": "1,181,307.35" }, { "Parameter": "Yesterday Collection", "Value": "57,818.04" }, { "Parameter": "Total Collection", "Value": "633,550.58" }, { "Parameter": "Ratio", "Value": "52.05%" }, { "Parameter": "To Be", "Value": "583,547.42" }],
+                "monthly": [{ "Parameter": "Count", "Value": "49" }, { "Parameter": "Sum of June Rental Target Amount", "Value": "1,247,098" }, { "Parameter": "Sum of June Month Collection", "Value": "633,550.58" }, { "Parameter": "Ratio", "Value": "50.80%" }, { "Parameter": "Te be Collect", "Value": "613,547.42" }, { "Parameter": "Per Day", "Value": "55,777.04" }],
+                "weekly": [{ "Parameter": "Count", "Value": "49" }, { "Parameter": "Sum of Weekly Target", "Value": "586,136.06" }, { "Parameter": "Sum of June Month Collection", "Value": "633,550.58" }, { "Parameter": "Ratio", "Value": "108.09%" }, { "Parameter": "Te be Collect", "Value": "-47,414.52" }, { "Parameter": "Per Day", "Value": "-47,414.52" }]
             },
             "Prabhath Wikramasinghe": {
-                "due": [
-                    { "Parameter": "Count", "Value": "268" },
-                    { "Parameter": "Sum of June Rental Due Amount", "Value": "5,532,371" },
-                    { "Parameter": "Sum of June Month beginning Total Arrears", "Value": "7,369,614.00" },
-                    { "Parameter": "Sum of Rental Arrears 09-06-2026", "Value": "5,587,433.22" },
-                    { "Parameter": "Sum of Rental Arrears 10-06-2026", "Value": "5,363,945.34" },
-                    { "Parameter": "Yesterday Collection", "Value": "223,487.88" },
-                    { "Parameter": "Total Collection", "Value": "2,005,668.66" },
-                    { "Parameter": "Ratio", "Value": "36.25%" },
-                    { "Parameter": "To Be", "Value": "3,526,702.34" }
-                ],
-                "monthly": [
-                    { "Parameter": "Count", "Value": "268" },
-                    { "Parameter": "Sum of June Rental Target Amount", "Value": "5,624,371" },
-                    { "Parameter": "Sum of June Month Collection", "Value": "2,005,668.66" },
-                    { "Parameter": "Ratio", "Value": "35.66%" },
-                    { "Parameter": "Te be Collect", "Value": "3,618,702.34" },
-                    { "Parameter": "Per Day", "Value": "328,972.94" }
-                ],
-                "weekly": [
-                    { "Parameter": "Count", "Value": "268" },
-                    { "Parameter": "Sum of Weekly Target", "Value": "2,643,454.37" },
-                    { "Parameter": "Sum of June Month Collection", "Value": "2,005,668.66" },
-                    { "Parameter": "Ratio", "Value": "75.87%" },
-                    { "Parameter": "Te be Collect", "Value": "637,785.71" },
-                    { "Parameter": "Per Day", "Value": "637,785.71" }
-                ]
+                "due": [{ "Parameter": "Count", "Value": "268" }, { "Parameter": "Sum of June Rental Due Amount", "Value": "5,532,371" }, { "Parameter": "Sum of June Month beginning Total Arrears", "Value": "7,369,614.00" }, { "Parameter": "Sum of Rental Arrears 09-06-2026", "Value": "5,587,433.22" }, { "Parameter": "Sum of Rental Arrears 10-06-2026", "Value": "5,363,945.34" }, { "Parameter": "Yesterday Collection", "Value": "223,487.88" }, { "Parameter": "Total Collection", "Value": "2,005,668.66" }, { "Parameter": "Ratio", "Value": "36.25%" }, { "Parameter": "To Be", "Value": "3,526,702.34" }],
+                "monthly": [{ "Parameter": "Count", "Value": "268" }, { "Parameter": "Sum of June Rental Target Amount", "Value": "5,624,371" }, { "Parameter": "Sum of June Month Collection", "Value": "2,005,668.66" }, { "Parameter": "Ratio", "Value": "35.66%" }, { "Parameter": "Te be Collect", "Value": "3,618,702.34" }, { "Parameter": "Per Day", "Value": "328,972.94" }],
+                "weekly": [{ "Parameter": "Count", "Value": "268" }, { "Parameter": "Sum of Weekly Target", "Value": "2,643,454.37" }, { "Parameter": "Sum of June Month Collection", "Value": "2,005,668.66" }, { "Parameter": "Ratio", "Value": "75.87%" }, { "Parameter": "Te be Collect", "Value": "637,785.71" }, { "Parameter": "Per Day", "Value": "637,785.71" }]
             },
             "Yohan Gunarathne": {
-                "due": [
-                    { "Parameter": "Count", "Value": "150" },
-                    { "Parameter": "Sum of June Rental Due Amount", "Value": "3,587,836" },
-                    { "Parameter": "Sum of June Month beginning Total Arrears", "Value": "4,576,426.12" },
-                    { "Parameter": "Sum of Rental Arrears 09-06-2026", "Value": "3,478,378.45" },
-                    { "Parameter": "Sum of Rental Arrears 10-06-2026", "Value": "3,401,587.17" },
-                    { "Parameter": "Yesterday Collection", "Value": "76,791.28" },
-                    { "Parameter": "Total Collection", "Value": "1,174,838.95" },
-                    { "Parameter": "Ratio", "Value": "32.75%" },
-                    { "Parameter": "To Be", "Value": "2,412,997.05" }
-                ],
-                "monthly": [
-                    { "Parameter": "Count", "Value": "150" },
-                    { "Parameter": "Sum of June Rental Target Amount", "Value": "3,687,836" },
-                    { "Parameter": "Sum of June Month Collection", "Value": "1,174,838.95" },
-                    { "Parameter": "Ratio", "Value": "31.86%" },
-                    { "Parameter": "Te be Collect", "Value": "2,512,997.05" },
-                    { "Parameter": "Per Day", "Value": "228,454.28" }
-                ],
-                "weekly": [
-                    { "Parameter": "Count", "Value": "150" },
-                    { "Parameter": "Sum of Weekly Target", "Value": "1,733,282.92" },
-                    { "Parameter": "Sum of June Month Collection", "Value": "1,174,838.95" },
-                    { "Parameter": "Ratio", "Value": "67.78%" },
-                    { "Parameter": "Te be Collect", "Value": "558,443.97" },
-                    { "Parameter": "Per Day", "Value": "558,443.97" }
-                ]
+                "due": [{ "Parameter": "Count", "Value": "150" }, { "Parameter": "Sum of June Rental Due Amount", "Value": "3,587,836" }, { "Parameter": "Sum of June Month beginning Total Arrears", "Value": "4,576,426.12" }, { "Parameter": "Sum of Rental Arrears 09-06-2026", "Value": "3,478,378.45" }, { "Parameter": "Sum of Rental Arrears 10-06-2026", "Value": "3,401,587.17" }, { "Parameter": "Yesterday Collection", "Value": "76,791.28" }, { "Parameter": "Total Collection", "Value": "1,174,838.95" }, { "Parameter": "Ratio", "Value": "32.75%" }, { "Parameter": "To Be", "Value": "2,412,997.05" }],
+                "monthly": [{ "Parameter": "Count", "Value": "150" }, { "Parameter": "Sum of June Rental Target Amount", "Value": "3,687,836" }, { "Parameter": "Sum of June Month Collection", "Value": "1,174,838.95" }, { "Parameter": "Ratio", "Value": "31.86%" }, { "Parameter": "Te be Collect", "Value": "2,512,997.05" }, { "Parameter": "Per Day", "Value": "228,454.28" }],
+                "weekly": [{ "Parameter": "Count", "Value": "150" }, { "Parameter": "Sum of Weekly Target", "Value": "1,733,282.92" }, { "Parameter": "Sum of June Month Collection", "Value": "1,174,838.95" }, { "Parameter": "Ratio", "Value": "67.78%" }, { "Parameter": "Te be Collect", "Value": "558,443.97" }, { "Parameter": "Per Day", "Value": "558,443.97" }]
             },
-            /* අලුතින් එකතු කරන ලද මුළු එකතුව (Total / Grand Total) */
             "Total Summary": {
-                "due": [
-                    { "Parameter": "Total Count", "Value": "820" },
-                    { "Parameter": "Sum of June Rental Due Amount", "Value": "18,109,717" },
-                    { "Parameter": "Sum of June Month beginning Total Rental Arrears", "Value": "23,165,413.75" },
-                    { "Parameter": "Sum of Rental Arrears 09-06-2026", "Value": "16,591,898.91" },
-                    { "Parameter": "Sum of Rental Arrears 10-06-2026", "Value": "16,031,555.82" },
-                    { "Parameter": "Yesterday Collection", "Value": "560,343.09" },
-                    { "Parameter": "Total Collection", "Value": "7,133,857.93" },
-                    { "Parameter": "Ratio", "Value": "39.39%" },
-                    { "Parameter": "To Be", "Value": "10,975,859.07" }
-                ],
-                "monthly": [
-                    { "Parameter": "Total Count", "Value": "820" },
-                    { "Parameter": "Sum of June Rental Target Amount", "Value": "18,441,717" },
-                    { "Parameter": "Sum of June Month Collection", "Value": "7,133,857.93" },
-                    { "Parameter": "Ratio", "Value": "38.68%" },
-                    { "Parameter": "Te be Collect", "Value": "11,307,859.07" },
-                    { "Parameter": "Per Day", "Value": "1,027,987.19" }
-                ],
-                "weekly": [
-                    { "Parameter": "Total Count", "Value": "820" },
-                    { "Parameter": "Sum of Weekly Target", "Value": "8,667,606.99" },
-                    { "Parameter": "Sum of June Month Collection", "Value": "7,133,857.93" },
-                    { "Parameter": "Ratio", "Value": "82.30%" },
-                    { "Parameter": "Te be Collect", "Value": "1,533,749.06" },
-                    { "Parameter": "Per Day", "Value": "1,533,749.06" }
-                ]
+                "due": [{ "Parameter": "Total Count", "Value": "820" }, { "Parameter": "Sum of June Rental Due Amount", "Value": "18,109,717" }, { "Parameter": "Sum of June Month beginning Total Rental Arrears", "Value": "23,165,413.75" }, { "Parameter": "Sum of Rental Arrears 09-06-2026", "Value": "16,591,898.91" }, { "Parameter": "Sum of Rental Arrears 10-06-2026", "Value": "16,031,555.82" }, { "Parameter": "Yesterday Collection", "Value": "560,343.09" }, { "Parameter": "Total Collection", "Value": "7,133,857.93" }, { "Parameter": "Ratio", "Value": "39.39%" }, { "Parameter": "To Be", "Value": "10,975,859.07" }],
+                "monthly": [{ "Parameter": "Total Count", "Value": "820" }, { "Parameter": "Sum of June Rental Target Amount", "Value": "18,441,717" }, { "Parameter": "Sum of June Month Collection", "Value": "7,133,857.93" }, { "Parameter": "Ratio", "Value": "38.68%" }, { "Parameter": "Te be Collect", "Value": "11,307,859.07" }, { "Parameter": "Per Day", "Value": "1,027,987.19" }],
+                "weekly": [{ "Parameter": "Total Count", "Value": "820" }, { "Parameter": "Sum of Weekly Target", "Value": "8,667,606.99" }, { "Parameter": "Sum of June Month Collection", "Value": "7,133,857.93" }, { "Parameter": "Ratio", "Value": "82.30%" }, { "Parameter": "Te be Collect", "Value": "1,533,749.06" }, { "Parameter": "Per Day", "Value": "1,533,749.06" }]
             }
         };
 
-        // පවතින අප්‍රේල්/මැයි දත්ත
         const allData = {
             April: {
                 Recovery: [
@@ -552,7 +394,7 @@
                     { name: "Lahiru Bandara", due: { portfolio: "121,905,618.78", facility: "265", dueAmt: "5,684,788.00", collection: "5,148,078.19", ratio: "90.56%", addRev: "536,709.81" }, np: { count: "3", arrears: "433,005.93", portfolio: "1,241,807.75", ratio: "0.35%" }, m6: { arrears: "110,772.05", portfolio: "51,823,732.55", ratio: "2.14%" }, m12: { arrears: "1,221,495.38", portfolio: "117,512,711.90", ratio: "1.04%" }, m18: { arrears: "1,519,130.32", portfolio: "121,846,593.06", ratio: "1.25%" }, notPaid: { facility: "34", arrears: "1,232,346.96", portfolio: "17,195,691.66" } },
                     { name: "Nalaka Upul Kumaratunge", due: { portfolio: "24,643,650.67", facility: "45", dueAmt: "1,072,222.00", collection: "1,079,544.55", ratio: "100.68%", addRev: "-7,322.55" }, np: { count: "1", arrears: "389,187.42", portfolio: "436,669.17", ratio: "0.89%" }, m12: { arrears: "76,741.93", portfolio: "22,054,841.09", ratio: "0.35%" }, m18: { arrears: "107,373.22", portfolio: "24,206,981.50", ratio: "0.44%" }, notPaid: { facility: "4", arrears: "389,187.42", portfolio: "2,189,533.83" } },
                     { name: "Prabhath Wikramasinghe", due: { portfolio: "97,439,664.98", facility: "283", dueAmt: "5,856,822.00", collection: "5,357,255.62", ratio: "91.47%", addRev: "499,566.38" }, np: { count: "2", arrears: "512,253.37", portfolio: "937,348.84", ratio: "0.55%" }, m6: { arrears: "N/A", portfolio: "N/A", ratio: "N/A" }, m12: { arrears: "50,308.42", portfolio: "11,591,707.89", ratio: "0.43%" }, m18: { arrears: "640,679.20", portfolio: "57,498,020.70", ratio: "1.11%" }, notPaid: { facility: "38", arrears: "1,356,930.93", portfolio: "12,726,904.48" } },
-                    { name: "Yohan Gunarathne", due: { portfolio: "78,814,794.21", facility: "146", dueAmt: "3,357,049.00", collection: "2,883,302.95", ratio: "85.89%", addRev: "473,746.05" }, np: { count: "2.0", arrears: "167,534.40", portfolio: "42,268,364.53", ratio: "0.40%" }, m6: { arrears: "167,534.40", portfolio: "42,268,364.53", ratio: "3.98%" }, m12: { arrears: "908,014.82", portfolio: "76,010,969.35", ratio: "1.19%" }, m18: { arrears: "989,982.41", portfolio: "78,814,794.21", ratio: "1.26%" }, notPaid: { facility: "27", arrears: "710,099.53", portfolio: "13,998,503.45" } }
+                    { name: "Yohan Gunarathne", due: { portfolio: "78,814,794.21", facility: "146", dueAmt: "3,357,049.00", collection: "2,883,302.95", ratio: "85.89%", addRev: "473,746.05" }, np: { count: "2.0", arrears: "167,534.40", portfolio: "42,268,364.53", ratio: "0.40%" }, m6: { arrears: "167,534.40", portfolio: "42,268,364.53", ratio: "3.98%" }, m12: { arrears: "908,014.82", portfolio: "76,010,969.35", ratio: "1.19%" }, m18: { arrears: "989,982.41", portfolio: "78,814,794.21", ratio: "1.26" }, notPaid: { facility: "27", arrears: "710,099.53", portfolio: "13,998,503.45" } }
                 ],
                 Marketing: [
                     { name: "Chamodya Ruwanwalle", data: { target: "1,750,000.00", facility: "2", achieve: "1,356,118.59", ratio: "77.49%" } },
@@ -562,19 +404,8 @@
                 ]
             },
             May: {
-                Recovery: [
-                    { name: "Chamodya Ruwanwalle", due: { portfolio: "39,903,723.17", facility: "79", dueAmt: "1,754,137.00", collection: "1,674,567.85", ratio: "95.46%", addRev: "79,569.15" }, np: { count: "1", arrears: "163,537.52", portfolio: "680,221.36", ratio: "0.24%" }, m6: { arrears: "1,248.17", portfolio: "26,949,102.81", ratio: "0.00%" }, m12: { arrears: "224,763.52", portfolio: "39,903,723.17", ratio: "0.56%" }, m18: { arrears: "224,763.52", portfolio: "39,903,723.17", ratio: "0.56%" }, notPaid: { facility: "6", arrears: "223,515.35", portfolio: "3,127,207.89" } },
-                    { name: "Lahiru Bandara", due: { portfolio: "121,134,973.30", facility: "269", dueAmt: "5,787,802.00", collection: "5,958,617.29", ratio: "102.95%", addRev: "-170,815.29" }, np: { count: "3.0", arrears: "488,583.93", portfolio: "1,255,618.70", ratio: "0.39%" }, m6: { arrears: "77,364.45", portfolio: "47,998,381.00", ratio: "0.16%" }, m12: { arrears: "965,476.44", portfolio: "113,400,658.13", ratio: "0.85%" }, m18: { arrears: "1,348,315.03", portfolio: "121,075,948.15", ratio: "1.11%" }, notPaid: { facility: "21.", arrears: "934,722.20", portfolio: "9,578,948.67" } },
-                    { name: "Nalaka Upul Kumaratunge", due: { portfolio: "26,244,249.80", facility: "49.", dueAmt: "1,147,760.00", collection: "1,046,560.71", ratio: "91.18%", addRev: "101,199.29" }, np: { count: "1.0", arrears: "406,189.42", portfolio: "12,197,099.35", ratio: "0.93%" }, m6: { arrears: "73,727.35", portfolio: "12,197,099.35", ratio: "0.60%" }, m12: { arrears: "113,760.08", portfolio: "21,292,974.74", ratio: "0.53%" }, m18: { arrears: "191,570.51", portfolio: "25,805,839.58", ratio: "0.74%" }, notPaid: { facility: "8", arrears: "488,709.55", portfolio: "4,879,317.42" } },
-                    { name: "Prabhath Wikramasinghe", due: { portfolio: "92,841,598.56", facility: "275", dueAmt: "5,640,330.00", collection: "5,683,423.00", ratio: "100.76%", addRev: "-43,093.00" }, np: { count: "N/A", arrears: "N/A", portfolio: "N/A", ratio: "N/A" }, m6: { arrears: "0.00", portfolio: "92,841,598.56", ratio: "0.00%" }, m12: { arrears: "13,839.54", portfolio: "1,841,237.48", ratio: "0.75%" }, m18: { arrears: "476,920.53", portfolio: "50,443,146.68", ratio: "0.95%" }, notPaid: { facility: "27", arrears: "1,181,325.77", portfolio: "8,954,106.91" } },
-                    { name: "Yohan Gunarathne", due: { portfolio: "78,163,532.88", facility: "147", dueAmt: "3,477,706.00", collection: "3,479,098.29", ratio: "100.04%", addRev: "-1,392.29" }, np: { count: "1", arrears: "172,128.00", portfolio: "838,876.97", ratio: "0.221%" }, m6: { arrears: "83,415.05", portfolio: "41,172,959.89", ratio: "0.20%" }, m12: { arrears: "821,256.14", portfolio: "72,800,615.64", ratio: "1.13%" }, m18: { arrears: "988,590.12", portfolio: "78,163,532.88", ratio: "1.26" }, notPaid: { facility: "14", arrears: "553,515.42", portfolio: "7,335,246.55" } }
-                ],
-                Marketing: [
-                    { name: "Chamodya Ruwanwalle", data: { target: "1,750,000.00", facility: "4", achieve: "2,318,762.27", ratio: "132.50%" } },
-                    { name: "Lahiru Bandara", data: { target: "2,750,000.00", facility: "6", achieve: "3,310,685.00", ratio: "120.39%" } },
-                    { name: "Nalaka Upul Kumaratunge", data: { target: "0.00", facility: "1", achieve: "457,200.00", ratio: "N/A" } },
-                    { name: "Yohan Gunarathne", data: { target: "2,500,000.00", facility: "3", achieve: "1,379,100.00", ratio: "55.16%" } }
-                ]
+                Recovery: [],
+                Marketing: []
             }
         };
 
@@ -585,36 +416,71 @@
         function selectMonth(month) {
             currentMonth = month;
             if (month === 'June') {
-                document.getElementById('selDeptLabel').innerText = "June - Marketing Officers";
+                document.getElementById('selDeptLabel').innerText = "June Division Selection";
                 const list = document.getElementById('officerList');
                 list.innerHTML = '';
+                
+                const recBtn = document.createElement('button');
+                recBtn.className = 'btn';
+                recBtn.innerText = "Recovery Dashboard";
+                recBtn.onclick = () => {
+                    document.getElementById('selDeptLabel').innerText = "June - Recovery Officers";
+                    renderJuneRecoveryList();
+                };
+                list.appendChild(recBtn);
 
-                // Marketing Officers ලැයිස්තුව සාදයි (Total Summary දත්ත වෙනම බටන් එකක් ලෙස අගට එකතු කර ඇත)
-                Object.keys(juneDataset).forEach(name => {
-                    const btn = document.createElement('button');
-                    btn.className = 'btn';
-                    
-                    // Total සඳහා විශේෂ කොළ පැහැති පෙනුමක් ලබාදීම
-                    if (name === "Total Summary") {
-                        btn.innerText = "📊 " + name;
-                        btn.classList.add('btn-total-summary');
-                    } else {
-                        btn.innerText = name;
-                    }
-
-                    btn.onclick = () => {
-                        selectedJuneOfficer = name;
-                        document.getElementById('juneOfficerLabel').innerText = name + " - Performance Categories";
-                        navigateTo('scrJuneTargets');
-                    };
-                    list.appendChild(btn);
-                });
+                const markBtn = document.createElement('button');
+                markBtn.className = 'btn';
+                markBtn.innerText = "Marketing Dashboard";
+                markBtn.onclick = () => {
+                    document.getElementById('selDeptLabel').innerText = "June - Marketing (April Data)";
+                    renderJuneMarketingList();
+                };
+                list.appendChild(markBtn);
+                
                 navigateTo('scrOfficers');
             } else {
-                document.getElementById('selMonthLabel').innerText = month + " - 2026 Dashboard";
+                document.getElementById('selDeptLabel').innerText = month + " - 2026 Dashboard";
                 document.getElementById('btnDueLabel').innerText = "Due " + month + " Info";
                 navigateTo('scrDept');
             }
+        }
+
+        function renderJuneRecoveryList() {
+            const list = document.getElementById('officerList');
+            list.innerHTML = '';
+            Object.keys(juneDataset).forEach(name => {
+                const btn = document.createElement('button');
+                btn.className = 'btn' + (name === "Total Summary" ? ' btn-total-summary' : '');
+                btn.innerText = name;
+                btn.onclick = () => {
+                    selectedJuneOfficer = name;
+                    document.getElementById('juneOfficerLabel').innerText = name + " - Performance Categories";
+                    navigateTo('scrJuneTargets');
+                };
+                list.appendChild(btn);
+            });
+        }
+
+        function renderJuneMarketingList() {
+            const list = document.getElementById('officerList');
+            list.innerHTML = '';
+            allData['April']['Marketing'].forEach((off, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'btn';
+                btn.innerText = off.name;
+                btn.onclick = () => {
+                    const title = document.getElementById('finalTitle');
+                    const body = document.getElementById('finalDataBody');
+                    title.innerText = off.name + " - June Marketing (April Data)";
+                    body.innerHTML = createRow("Target", "Rs. " + off.data.target) +
+                                     createRow("Number of Facility", off.data.facility) +
+                                     createRow("Achievement", "Rs. " + off.data.achieve) +
+                                     createRow("Ratio (%)", off.data.ratio);
+                    navigateTo('scrFinal');
+                };
+                list.appendChild(btn);
+            });
         }
 
         function selectDept(dept) {
@@ -622,7 +488,6 @@
             document.getElementById('selDeptLabel').innerText = currentMonth + " " + dept + " Division";
             const list = document.getElementById('officerList');
             list.innerHTML = '';
-
             allData[currentMonth][dept].forEach((off, idx) => {
                 const btn = document.createElement('button');
                 btn.className = 'btn';
@@ -632,7 +497,6 @@
                     const body = document.getElementById('finalDataBody');
                     const title = document.getElementById('finalTitle');
                     body.innerHTML = '';
-
                     if(currentDept === 'Recovery') {
                         document.getElementById('selOfficerLabel').innerText = officer.name + " (" + currentMonth + ")";
                         window.currentOfficerIdxLegacy = idx; 
@@ -656,7 +520,6 @@
             const body = document.getElementById('finalDataBody');
             const title = document.getElementById('finalTitle');
             body.innerHTML = '';
-
             if(cat === 'due') {
                 title.innerText = "Due " + currentMonth + " Breakdown (" + officer.name + ")";
                 body.innerHTML = createRow("Sum of Portfolio", "Rs. " + officer.due.portfolio) + createRow("Number of Facility", officer.due.facility) + createRow("Rental Due Amount", "Rs. " + officer.due.dueAmt) + createRow("Collection", "Rs. " + officer.due.collection) + createRow("Ratio", officer.due.ratio) + createRow("Cumulative Add / Reversal", "Rs. " + officer.due.addRev);
@@ -673,42 +536,20 @@
             navigateTo('scrFinal');
         }
 
-        // June මාසයේ දත්ත ලස්සන වගුවක් ලෙස පෙන්වන ශ්‍රිතය
         function selectJuneCategory(categoryType) {
             const body = document.getElementById('finalDataBody');
             const title = document.getElementById('finalTitle');
             body.innerHTML = '';
-
-            let categoryName = "";
-            if(categoryType === 'due') categoryName = "Due Target";
-            if(categoryType === 'monthly') categoryName = "Monthly Target Achievement";
-            if(categoryType === 'weekly') categoryName = "Weekly Target - 47%";
-
+            let categoryName = (categoryType === 'due') ? "Due Target" : (categoryType === 'monthly') ? "Monthly Target Achievement" : "Weekly Target - 47%";
             title.innerText = selectedJuneOfficer + " - " + categoryName;
-
             const rowsData = juneDataset[selectedJuneOfficer][categoryType];
-            
-            let tableHtml = `<div class="table-responsive">
-                                <table class="june-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Description / Metric</th>
-                                            <th>Value</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>`;
-            
+            let tableHtml = `<div class="table-responsive"><table class="june-table"><thead><tr><th>Description / Metric</th><th>Value</th></tr></thead><tbody>`;
             rowsData.forEach(row => {
                 let rowStyle = (selectedJuneOfficer === "Total Summary") ? 'class="total-highlight"' : '';
-                tableHtml += `<tr ${rowStyle}>
-                                <td><strong>${row.Parameter}</strong></td>
-                                <td>${row.Value}</td>
-                             </tr>`;
+                tableHtml += `<tr ${rowStyle}><td><strong>${row.Parameter}</strong></td><td>${row.Value}</td></tr>`;
             });
-
             tableHtml += `</tbody></table></div>`;
             body.innerHTML = tableHtml;
-
             navigateTo('scrFinal');
         }
 
