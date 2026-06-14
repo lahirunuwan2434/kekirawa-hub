@@ -203,7 +203,7 @@
                 <input type="text" id="username" required>
             </div>
             <div class="input-group">
-                <label for="password">මුරපදය (Password)</label>
+                <label for="මුරපදය (Password)">මුරපදය (Password)</label>
                 <input type="password" id="password" required>
             </div>
             <button type="submit" class="login-btn">ඇතුළු වන්න</button>
@@ -387,6 +387,15 @@
             }
         };
 
+        // ජූනි මාසයේ අලෙවිකරණ (Marketing) දත්ත සඳහා පමණක් වෙන් වූ ස්වාධීන දත්ත ගබඩාව
+        const juneMarketingData = {
+            "Chamodya Ruwanwalle": { target: "4,000,000.00", facility: "2", achieve: "1,549,447.98", ratio: "38.74%" },
+            "Lahiru Bandara": { target: "6,500,000.00", facility: "5", achieve: "2,891692.00", ratio: "44.49%" },
+            "Nalaka Upul Kumaratunge": { target: "3,000,000.00", facility: "N/A", achieve: "N/A", ratio: "N/A" },
+            "Yohan Gunarathne": { target: "5,500,000.00", facility: "1", achieve: "401,689.58", ratio: "7.30%" },
+       	    "Total": { target: "30,000,000.00", facility: "8", achieve: "4,842,829.56", ratio: "16.14%"  }	
+ };
+
         const allData = {
             April: {
                 Recovery: [
@@ -403,10 +412,7 @@
                     { name: "Yohan Gunarathne", data: { target: "2,500,000.00", facility: "2", achieve: "1,194,395.00", ratio: "47.78%" } }
                 ]
             },
-            May: {
-                Recovery: [],
-                Marketing: []
-            }
+            May: { Recovery: [], Marketing: [] }
         };
 
         let currentMonth = '';
@@ -433,7 +439,7 @@
                 markBtn.className = 'btn';
                 markBtn.innerText = "Marketing Dashboard";
                 markBtn.onclick = () => {
-                    document.getElementById('selDeptLabel').innerText = "June - Marketing (April Data)";
+                    document.getElementById('selDeptLabel').innerText = "June - Marketing (Independent)";
                     renderJuneMarketingList();
                 };
                 list.appendChild(markBtn);
@@ -462,21 +468,23 @@
             });
         }
 
+        // නව දත්ත මත පදනම්ව ස්වාධීන Marketing දත්ත පෙන්වීම
         function renderJuneMarketingList() {
             const list = document.getElementById('officerList');
             list.innerHTML = '';
-            allData['April']['Marketing'].forEach((off, idx) => {
+            Object.keys(juneMarketingData).forEach(name => {
                 const btn = document.createElement('button');
                 btn.className = 'btn';
-                btn.innerText = off.name;
+                btn.innerText = name;
                 btn.onclick = () => {
+                    const off = juneMarketingData[name];
                     const title = document.getElementById('finalTitle');
                     const body = document.getElementById('finalDataBody');
-                    title.innerText = off.name + " - June Marketing (April Data)";
-                    body.innerHTML = createRow("Target", "Rs. " + off.data.target) +
-                                     createRow("Number of Facility", off.data.facility) +
-                                     createRow("Achievement", "Rs. " + off.data.achieve) +
-                                     createRow("Ratio (%)", off.data.ratio);
+                    title.innerText = name + " - June Marketing (Independent)";
+                    body.innerHTML = createRow("Target", "Rs. " + off.target) +
+                                     createRow("Number of Facility", off.facility) +
+                                     createRow("Achievement", "Rs. " + off.achieve) +
+                                     createRow("Ratio (%)", off.ratio);
                     navigateTo('scrFinal');
                 };
                 list.appendChild(btn);
